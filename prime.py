@@ -1,24 +1,29 @@
-import random
+import requests
+import json
+from datetime import datetime
 
-def generate_random_numbers(count, min_val, max_val):
-    """Generates a list of random numbers within a specified range.
+def fetch_and_display_ip_info():
+    """Fetches IP information and displays it."""
+    try:
+        response = requests.get("https://ipinfo.io/json")
+        response.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
+        data = response.json()
 
-    Args:
-        count: The number of random numbers to generate.
-        min_val: The minimum possible value for the random numbers.
-        max_val: The maximum possible value for the random numbers.
+        print("IP Information:")
+        print(f"  IP Address: {data['ip']}")
+        print(f"  City: {data.get('city', 'N/A')}")
+        print(f"  Region: {data.get('region', 'N/A')}")
+        print(f"  Country: {data['country']}")
+        print(f"  Timezone: {data.get('timezone', 'N/A')}")
+        
+        current_time = datetime.now()
+        print(f"  Current Time: {current_time.strftime('%Y-%m-%d %H:%M:%S')}")
 
-    Returns:
-        A list of random numbers.
-    """
-    random_numbers = []
-    for _ in range(count):
-        random_numbers.append(random.randint(min_val, max_val))
-    return random_numbers
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching IP information: {e}")
+    except json.JSONDecodeError as e:
+        print(f"Error decoding JSON response: {e}")
 
 if __name__ == "__main__":
-    num_count = 10
-    min_range = 1
-    max_range = 100
-    random_list = generate_random_numbers(num_count, min_range, max_range)
-    print(f"Generated random numbers: {random_list}")
+    fetch_and_display_ip_info()
