@@ -1,10 +1,15 @@
 pipeline {
     agent any
     stages {
-        stage('prime num') {
+        stage('Install dependencies') {
          steps {
-            sh 'python3 prime.py'
+            sh 'pip install -r requirements.txt'
          }
         }   
+        stage('run') {
+         steps {
+            sh'python3 prime.py'
+         }
+        }
      }
 }
