@@ -1,5 +1,5 @@
 pipeline {
-    agent only
+    agent any
     stages {
         stage('prime num') {
          steps {
