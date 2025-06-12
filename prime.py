@@ -1,26 +1,24 @@
-# Program to check if a number is prime or not
+import random
 
-num = 29
+def generate_random_numbers(count, min_val, max_val):
+    """Generates a list of random numbers within a specified range.
 
-# To take input from the user
-#num = int(input("Enter a number: "))
+    Args:
+        count: The number of random numbers to generate.
+        min_val: The minimum possible value for the random numbers.
+        max_val: The maximum possible value for the random numbers.
 
-# define a flag variable
-flag = False
+    Returns:
+        A list of random numbers.
+    """
+    random_numbers = []
+    for _ in range(count):
+        random_numbers.append(random.randint(min_val, max_val))
+    return random_numbers
 
-if num == 0 or num == 1:
-    print(num, "is not a prime number")
-elif num > 1:
-    # check for factors
-    for i in range(2, num):
-        if (num % i) == 0:
-            # if factor is found, set flag to True
-            flag = True
-            # break out of loop
-            break
-
-    # check if flag is True
-    if flag:
-        print(num, "is not a prime number")
-    else:
-        print(num, "is a prime number")
+if __name__ == "__main__":
+    num_count = 10
+    min_range = 1
+    max_range = 100
+    random_list = generate_random_numbers(num_count, min_range, max_range)
+    print(f"Generated random numbers: {random_list}")
