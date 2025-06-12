@@ -1,0 +1,10 @@
+pipeline {
+    agent only
+    stages {
+        stage('prime num') {
+         steps {
+            sh 'python3 prime.py'
+         }
+        }   
+     }
+}
