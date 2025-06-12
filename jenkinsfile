@@ -4,7 +4,7 @@ pipeline {
         stage('prime num') {
          agent {
             docker {
-               image 'jenkins/jenkins'
+               image 'python3'
                reuseNode true
             }
          }
