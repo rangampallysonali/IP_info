@@ -2,12 +2,6 @@ pipeline {
     agent any
     stages {
         stage('prime num') {
-         agent {
-            docker {
-               image 'python3'
-               reuseNode true
-            }
-         }
          steps {
             sh 'python3 prime.py'
          }
