@@ -1,31 +1,20 @@
 pipeline {
-    agent any
-
+    agent {
+        docker {
+            image 'python:3.10-slim'  // Lightweight Python 3.10 image
+        }
+    }
     stages {
-        stage('Checkout') {
+        stage('Install dependencies') {
             steps {
-                checkout scm
+                sh 'pip install requests'
             }
         }
-
-        stage('Setup Python Environment') {
+        stage('Run script') {
             steps {
-                sh '''
-                    python3 -m venv venv          # create virtual environment named 'venv'
-                    . venv/bin/activate           # activate the virtual environment
-                    pip install --upgrade pip     # upgrade pip inside venv (optional but recommended)
-                    pip install requests          # install requests library inside venv
-                '''
-            }
-        }
-
-        stage('Run Python Script') {
-            steps {
-                sh '''
-                    . venv/bin/activate           # activate virtual environment again before running script
-                    python prime.py               # run your Python script using the venv's python
-                '''
+                sh 'python prime.py'
             }
         }
     }
 }
+
