@@ -2,21 +2,23 @@ pipeline {
     agent {
         docker {
             image 'python:3.10-slim'
-            args '-v $WORKSPACE:$WORKSPACE'  // Mount workspace so script can run
+            args '-v C:/jenkins/workspace/prime_num:/workspace'  // Map Windows workspace to /workspace in container
         }
     }
     stages {
-        stage('Run IP Info Script') {
+        stage('Run Python Script') {
             steps {
-                // Make sure dependencies installed and run your script
-                sh '''
-                   pip install requests
-                   python prime.py
-                '''
+                dir('/workspace') {   // Use Linux style path inside container
+                    sh '''
+                        pip install requests
+                        python prime.py
+                    '''
+                }
             }
         }
     }
 }
+
 
 
 
