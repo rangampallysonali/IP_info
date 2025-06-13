@@ -2,26 +2,22 @@ pipeline {
     agent {
         docker {
             image 'python:3.10-slim'
-            args '-v /var/jenkins_home/workspace/prime_num:/workspace'
-            reuseNode true
+            args '-v $WORKSPACE:$WORKSPACE'  // Mount workspace so script can run
         }
     }
-    // `customWorkspace` goes here, directly under pipeline, NOT under options
-    customWorkspace '/workspace'
-
     stages {
-        stage('Install dependencies') {
+        stage('Run IP Info Script') {
             steps {
-                sh 'pip install requests'
-            }
-        }
-        stage('Run script') {
-            steps {
-                sh 'python prime.py'
+                // Make sure dependencies installed and run your script
+                sh '''
+                   pip install requests
+                   python prime.py
+                '''
             }
         }
     }
 }
+
 
 
 
