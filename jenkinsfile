@@ -7,14 +7,24 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Install Dependencies') {
+
+        stage('Setup Python Environment') {
             steps {
-                sh 'python3 -m pip install --user requests'
+                sh '''
+                    python3 -m venv venv          # create virtual environment named 'venv'
+                    . venv/bin/activate           # activate the virtual environment
+                    pip install --upgrade pip     # upgrade pip inside venv (optional but recommended)
+                    pip install requests          # install requests library inside venv
+                '''
             }
         }
-        stage('Run Python') {
+
+        stage('Run Python Script') {
             steps {
-                sh 'python3 prime.py'
+                sh '''
+                    . venv/bin/activate           # activate virtual environment again before running script
+                    python prime.py               # run your Python script using the venv's python
+                '''
             }
         }
     }
