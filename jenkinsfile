@@ -1,29 +1,10 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.11'
-        }
-    }
-
+    agent any
     stages {
-        stage('Install dependencies') {
+        stage('Run Python') {
             steps {
-                sh '''
-                    python -m venv venv
-                    . venv/bin/activate
-                    pip install -r requirements.txt
-                '''
-            }
-        }
-
-        stage('Run Script') {
-            steps {
-                sh '''
-                    . venv/bin/activate
-                    python prime.py
-                '''
+                sh 'python3 prime.py'
             }
         }
     }
 }
-
