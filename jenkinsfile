@@ -1,11 +1,10 @@
 pipeline {
     agent {
-        label 'dokcer-agent'
-    
         docker {
             image 'python:3.10-slim'  // Lightweight Python 3.10 image
         }
     }
+
     stages {
         stage('Install dependencies') {
             steps {
@@ -19,4 +18,5 @@ pipeline {
         }
     }
 }
+
 
