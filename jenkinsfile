@@ -1,8 +1,15 @@
 pipeline {
     agent {
         docker {
-            image 'python:3.10-slim'  // Lightweight Python 3.10 image
+            image 'python:3.10-slim'
+            args '-v /var/jenkins_home/workspace/prime_num:/workspace'
+            reuseNode true
         }
+    }
+
+    options {
+        // Use Linux style path inside container
+        customWorkspace '/workspace'
     }
 
     stages {
@@ -18,5 +25,6 @@ pipeline {
         }
     }
 }
+
 
 
