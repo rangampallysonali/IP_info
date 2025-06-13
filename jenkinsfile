@@ -6,11 +6,8 @@ pipeline {
             reuseNode true
         }
     }
-
-    options {
-        // Use Linux style path inside container
-        customWorkspace '/workspace'
-    }
+    // `customWorkspace` goes here, directly under pipeline, NOT under options
+    customWorkspace '/workspace'
 
     stages {
         stage('Install dependencies') {
