@@ -1,14 +1,15 @@
 pipeline {
     agent {
-        docker {
-            image 'python:3.10-slim'
-            args '-v C:/jenkins/workspace/prime_num:/workspace'  // Map Windows workspace to /workspace in container
-        }
-    }
     stages {
+     stage('Install dependencies') {
+            steps {
+                // Upgrade pip and install requirements
+                sh '''
+                    python3 -m pip install --upgrade pip
+                    pip3 install -r requirements.txt
+                  }      '''
         stage('Run Python Script') {
             steps {
-                dir('/workspace') {   // Use Linux style path inside container
                     sh '''
                         pip install requests
                         python prime.py
