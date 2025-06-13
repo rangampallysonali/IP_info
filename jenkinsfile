@@ -1,6 +1,17 @@
 pipeline {
     agent any
+
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh 'python3 -m pip install --user requests'
+            }
+        }
         stage('Run Python') {
             steps {
                 sh 'python3 prime.py'
