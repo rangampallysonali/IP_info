@@ -4,7 +4,7 @@ pipeline {
      stage('Install dependencies') {
             steps {
                
-                bat'''
+                sh'''
                     python3 -m pip install --upgrade pip 
                     pip3 install -r requirements.txt
                     '''
@@ -12,7 +12,7 @@ pipeline {
 }
 stage('run script') {
             steps {
-                    bat '''
+                    sh '''
                        
                         python prime.py
                     '''
