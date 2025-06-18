@@ -31,20 +31,7 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            when {
-                branch 'main'
-            }
-            steps {
-                echo "Deploying app"
-                withCredentials([sshUserPrivateKey(credentialsId: 'my-ssh-key', keyFileVariable: 'SSH_KEY')]) {
-                    sh '''
-                        scp -i $SSH_KEY -r ./myapp ubuntu@98.81.234.38:/home/ubuntu/myapp
-                        ssh -i $SSH_KEY ubuntu@98.81.234.38 "/home/ubuntu/restart_myapp.sh"
-                    '''
-                }
-            }
-        }
+        
     }
 }
 
