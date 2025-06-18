@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        APP_NAME = "myapp" // ✅ Set your app name here
+        APP_NAME = "myapp"
     }
 
     stages {
@@ -35,13 +35,12 @@ pipeline {
             }
         }
 
+        // ✅ Deploy runs on host now (not inside Docker image)
         stage('Deploy') {
+            agent any
             steps {
-                // ✅ Use a non-Docker agent OR Docker-enabled host for this stage
-                // because Docker inside Docker without setup will fail
                 sh '''
-                    # These commands require Docker to be installed on the agent
-                    echo "Deploying container: $APP_NAME"
+                    echo Deploying container: $APP_NAME
                     docker stop $APP_NAME || true
                     docker rm $APP_NAME || true
                     docker run -d --name $APP_NAME $APP_NAME:latest
@@ -50,10 +49,3 @@ pipeline {
         }
     }
 }
-
-
-
-
-
-
-
