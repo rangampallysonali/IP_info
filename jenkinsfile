@@ -30,13 +30,12 @@ pipeline {
                 sh 'python -m unittest test.py'
             }
         }
-    }
 
-    post {
-        success {
-            // Deploy runs outside docker container
-            node {
-                stage('Deploy') {
+        // ✅ This runs outside the Docker container, on the Jenkins host
+        stage('Deploy') {
+            agent { label 'master' } // Or whatever your Jenkins node label is
+            steps {
+                script {
                     sh '''
                         echo Deploying container: $APP_NAME
                         docker stop $APP_NAME || true
@@ -48,4 +47,5 @@ pipeline {
         }
     }
 }
+
 
