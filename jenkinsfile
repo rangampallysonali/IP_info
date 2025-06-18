@@ -31,11 +31,12 @@ stage('run script') {
                 }
             }
             stage('Deploy') {
-    when {
-    expression {
-        return env.BRANCH_NAME == 'main'
+    stage('Debug branch') {
+    steps {
+        echo "Branch detected: ${env.BRANCH_NAME}"
     }
 }
+
     steps {
         echo 'Deploying application to EC2...'
         withCredentials([sshUserPrivateKey(credentialsId: 'my-ssh-key', keyFileVariable: 'SSH_KEY')]) {
