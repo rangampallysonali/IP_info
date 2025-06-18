@@ -1,56 +1,53 @@
 pipeline {
     agent {
-docker {
-image 'python:3.11-slim'
-}
-}
+        docker {
+            image 'python:3.11-slim'
+        }
+    }
+
     stages {
-     stage('Install dependencies') {
+        stage('Install dependencies') {
             steps {
-               
-                sh'''
+                sh '''
                     python3 -m pip install --upgrade pip 
                     pip3 install -r requirements.txt
-                    '''
-}
-}
-stage('run script') {
+                '''
+            }
+        }
+
+        stage('run script') {
             steps {
+                sh '''
+                    python ip.py
+                '''
+            }
+        }
+
+        stage('test') {
+            steps {
+                sh '''
+                    python -m unittest test.py
+                '''
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo "Deploying app"
+                withCredentials([sshUserPrivateKey(credentialsId: 'my-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                     sh '''
-                       
-                        python ip.py
+                        scp -i $SSH_KEY -r ./myapp ubuntu@98.81.234.38:/home/ubuntu/myapp
+                        ssh -i $SSH_KEY ubuntu@98.81.234.38 "/home/ubuntu/restart_myapp.sh"
                     '''
                 }
             }
-            stage('test') {
-            steps {
-                    sh '''
-                       
-                        python -m unittest test.py
-                    '''
-                }
-            }
-            stage('Deploy') {
-    stage('Deploy') {
-    when {
-        branch 'main'
-    }
-    steps {
-        echo "Deploying app"
-        withCredentials([sshUserPrivateKey(credentialsId: 'my-ssh-key', keyFileVariable: 'SSH_KEY')]) {
-            sh '''
-                scp -i $SSH_KEY -r ./myapp ubuntu@98.81.234.38:/home/ubuntu/myapp
-                ssh -i $SSH_KEY ubuntu@98.81.234.38 "/home/ubuntu/restart_myapp.sh"
-            '''
+        }
     }
 }
 
-
-   }
-}
-
-       
- }
 
 
 
