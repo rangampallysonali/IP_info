@@ -32,18 +32,24 @@ pipeline {
         }
 
         stage('Deploy') {
-    agent any
+    agent {
+        docker {
+            image 'docker:latest'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
     steps {
         script {
             sh '''
-                echo Deploying container: $APP_NAME
-                docker stop $APP_NAME || true
-                docker rm $APP_NAME || true
-                docker run -d --name $APP_NAME $APP_NAME:latest
+                echo Deploying container: myapp
+                docker stop myapp || true
+                docker rm myapp || true
+                docker run -d --name myapp myapp:latest
             '''
         }
     }
 }
+
 
     }
 }
