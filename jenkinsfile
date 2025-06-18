@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        APP_NAME = "myapp"
+        APP_NAME = 'myapp'
     }
 
     stages {
@@ -21,31 +21,31 @@ pipeline {
 
         stage('Run script') {
             steps {
-                sh '''
-                    python ip.py
-                '''
+                sh 'python ip.py'
             }
         }
 
         stage('Test') {
             steps {
-                sh '''
-                    python -m unittest test.py
-                '''
+                sh 'python -m unittest test.py'
             }
         }
+    }
 
-        // ✅ Deploy runs on host now (not inside Docker image)
-        stage('Deploy') {
-            agent any
-            steps {
-                sh '''
-                    echo Deploying container: $APP_NAME
-                    docker stop $APP_NAME || true
-                    docker rm $APP_NAME || true
-                    docker run -d --name $APP_NAME $APP_NAME:latest
-                '''
+    post {
+        success {
+            // Deploy runs outside docker container
+            node {
+                stage('Deploy') {
+                    sh '''
+                        echo Deploying container: $APP_NAME
+                        docker stop $APP_NAME || true
+                        docker rm $APP_NAME || true
+                        docker run -d --name $APP_NAME $APP_NAME:latest
+                    '''
+                }
             }
         }
     }
 }
+
