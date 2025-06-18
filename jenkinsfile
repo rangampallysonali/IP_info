@@ -31,14 +31,16 @@ pipeline {
             }
         }
 stage('Deploy') {
-            steps {
-                sh '''
-                    docker stop $APP_NAME || true
-                    docker rm $APP_NAME || true
-                    docker run --name $APP_NAME $APP_NAME:latest
-                '''
-            }
-        }
+    steps {
+        sh '''
+            apt-get update && apt-get install -y docker.io
+            docker stop $APP_NAME || true
+            docker rm $APP_NAME || true
+            docker run --name $APP_NAME $APP_NAME:latest
+        '''
+    }
+}
+
 
         
     }
