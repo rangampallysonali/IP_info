@@ -31,20 +31,20 @@ pipeline {
             }
         }
 
-        // ✅ This runs outside the Docker container, on the Jenkins host
         stage('Deploy') {
-            agent { label 'master' } // Or whatever your Jenkins node label is
-            steps {
-                script {
-                    sh '''
-                        echo Deploying container: $APP_NAME
-                        docker stop $APP_NAME || true
-                        docker rm $APP_NAME || true
-                        docker run -d --name $APP_NAME $APP_NAME:latest
-                    '''
-                }
-            }
+    agent any
+    steps {
+        script {
+            sh '''
+                echo Deploying container: $APP_NAME
+                docker stop $APP_NAME || true
+                docker rm $APP_NAME || true
+                docker run -d --name $APP_NAME $APP_NAME:latest
+            '''
         }
+    }
+}
+
     }
 }
 
