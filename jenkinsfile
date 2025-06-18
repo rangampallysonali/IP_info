@@ -32,8 +32,10 @@ stage('run script') {
             }
             stage('Deploy') {
     when {
-        branch 'main' // Deploy only on main branch
+    expression {
+        return env.BRANCH_NAME == 'main'
     }
+}
     steps {
         echo 'Deploying application to EC2...'
         withCredentials([sshUserPrivateKey(credentialsId: 'my-ssh-key', keyFileVariable: 'SSH_KEY')]) {
