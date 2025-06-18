@@ -5,6 +5,10 @@ pipeline {
         }
     }
 
+    environment {
+        APP_NAME = "myapp" // ✅ Set your app name here
+    }
+
     stages {
         stage('Install dependencies') {
             steps {
@@ -15,7 +19,7 @@ pipeline {
             }
         }
 
-        stage('run script') {
+        stage('Run script') {
             steps {
                 sh '''
                     python ip.py
@@ -23,26 +27,27 @@ pipeline {
             }
         }
 
-        stage('test') {
+        stage('Test') {
             steps {
                 sh '''
                     python -m unittest test.py
                 '''
             }
         }
-stage('Deploy') {
-    steps {
-        sh '''
-            apt-get update && apt-get install -y docker.io
-            docker stop $APP_NAME || true
-            docker rm $APP_NAME || true
-            docker run --name $APP_NAME $APP_NAME:latest
-        '''
-    }
-}
 
-
-        
+        stage('Deploy') {
+            steps {
+                // ✅ Use a non-Docker agent OR Docker-enabled host for this stage
+                // because Docker inside Docker without setup will fail
+                sh '''
+                    # These commands require Docker to be installed on the agent
+                    echo "Deploying container: $APP_NAME"
+                    docker stop $APP_NAME || true
+                    docker rm $APP_NAME || true
+                    docker run -d --name $APP_NAME $APP_NAME:latest
+                '''
+            }
+        }
     }
 }
 
